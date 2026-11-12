@@ -29,7 +29,6 @@
   <p id="msg">ひらいています…</p>
   <a id="direct" href="#">うまく開かないときはこちら</a>
 </div>
-<a class="help" id="help" href="#" target="_top">開けないときはここをタップ</a>
 <iframe id="app" title="すくすくノート" allow="clipboard-write"></iframe>
 <script>
   // アプリ本体のURL（合言葉はここに書かない。各自のURLの「#k=」のあとから読む）
@@ -42,14 +41,7 @@
     var url = APP_URL + '?k=' + m[1];
     direct.href = url;
     direct.target = '_top';
-    var help = document.getElementById('help');
-    help.href = url;
-    frame.onload = function () {
-      frame.style.display = 'block';
-      // 中で開けなかったとき用の逃げ道を、はじめの15秒だけ上に出す
-      help.style.display = 'block';
-      setTimeout(function () { help.style.display = 'none'; }, 15000);
-    };
+    frame.onload = function () { frame.style.display = 'block'; };
     frame.src = url;
     // 8秒たっても表示されないときは、直接ひらくボタンを出す
     setTimeout(function () { direct.style.display = 'inline-block'; }, 8000);
