@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>すくすくノート</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="すくすくノート">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FBFAF6">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-180.png">
+<style>
+  html,body{margin:0;height:100%;background:#FBFAF6;font-family:'Hiragino Maru Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;color:#26302D}
+  #app{position:fixed;inset:0;width:100%;height:100%;border:0;display:none;background:#FBFAF6}
+  .wait{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center}
+  .wait img{width:112px;height:112px;border-radius:28px}
+  .wait p{margin:0;font-size:17px;line-height:1.7}
+  .help{position:fixed;left:50%;top:calc(8px + env(safe-area-inset-top));transform:translateX(-50%);z-index:5;display:none;padding:8px 14px;border-radius:999px;background:rgba(38,48,45,.85);color:#fff;font-size:13px;text-decoration:none;white-space:nowrap}
+  .wait a{display:none;margin-top:6px;padding:14px 22px;border-radius:999px;background:#2A7560;color:#fff;text-decoration:none;font-weight:700;font-size:16px;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wait" id="wait">
+  <img src="icon-180.png" alt="">
+  <p id="msg">ひらいています…</p>
+  <a id="direct" href="#">うまく開かないときはこちら</a>
+</div>
+<a class="help" id="help" href="#" target="_top">開けないときはここをタップ</a>
+<iframe id="app" title="すくすくノート" allow="clipboard-write"></iframe>
+<script>
+  // アプリ本体のURL（合言葉はここに書かない。各自のURLの「#k=」のあとから読む）
+  var APP_URL = 'https://script.google.com/macros/s/AKfycbyi1zKd7L0FWRmNxbKYoqy9NscapSyMW7bSnhJgrP2D8gQoRr1s96cBh1aGMsk7NrOpyA/exec';
+  var m = location.hash.match(/k=([A-Za-z0-9]+)/);
+  var msg = document.getElementById('msg'), direct = document.getElementById('direct'), frame = document.getElementById('app');
+  if (!m) {
+    msg.innerHTML = 'このページは、専用のURLからだけ開けます。<br>届いたURLから開き直してください。';
+  } else {
+    var url = APP_URL + '?k=' + m[1];
+    direct.href = url;
+    direct.target = '_top';
+    var help = document.getElementById('help');
+    help.href = url;
+    frame.onload = function () {
+      frame.style.display = 'block';
+      // 中で開けなかったとき用の逃げ道を、はじめの15秒だけ上に出す
+      help.style.display = 'block';
+      setTimeout(function () { help.style.display = 'none'; }, 15000);
+    };
+    frame.src = url;
+    // 8秒たっても表示されないときは、直接ひらくボタンを出す
+    setTimeout(function () { direct.style.display = 'inline-block'; }, 8000);
+  }
+</script>
+</body>
+</html>
